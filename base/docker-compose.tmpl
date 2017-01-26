@@ -1,17 +1,20 @@
 {{ .Project }}:
   image: rancher/load-balancer-service
   ports:
-    - 8001:8001
+    - 5000:5000
   links:
     - {{ .Project }}-app:{{ .Project }}-app
 
 {{ .Project }}-app:
   image: {{ .Owner }}/{{ .Project }}:{{ .Tag }}
   expose:
-    - 8001
+    - 5000
   environment:
     RANCHER_SERVICE_DISCOVERY: 'true'
-    LISTEN_PORT: 8001
+    LISTEN_PORT: 5000
+  entrypoint:
+    - /entrypoint.sh
+    - web
   labels:
     io.rancher.container.pull_image: always
     io.rancher.container.hostname_override: container_name
